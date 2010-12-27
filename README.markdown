@@ -1,30 +1,22 @@
-# holman does dotfiles
+# diabolo does dotfiles
+
+this is a forked project of [holman does dotfiles](https://github.com/holman/dotfiles).
+
+for the original blog article by Holman which inspired this [see](http://zachholman.com/2010/08/dotfiles-are-meant-to-be-forked/)
 
 ## dotfiles
 
-Your dotfiles are how you personalize your system. These are mine. The very
-prejudiced mix: OS X, zsh, Ruby, Rails, git, homebrew, rvm, vim. If you
-match up along most of those lines, you may dig my dotfiles.
-
-I was a little tired of having long alias files and everything strewn about
-(which is extremely common on other dotfiles projects, too). That led to this
-project being much more topic-centric. I realized I could split a lot of things
-up into the main areas I used (Ruby, git, system libraries, and so on), so I
-structured the project accordingly.
-
-If you're interested in the philosophy behind why projects like these are
-awesome, you might want to [read my post on the
-subject](http://zachholman.com/2010/08/dotfiles-are-meant-to-be-forked/).
+My personalised mix of dotfiles will focus on Git, Homebrew, RVM and VIM. I will try and make them useful on nix VM's as well as OSX.
 
 ## install
 
-- `git clone git://github.com/holman/dotfiles ~/.dotfiles`
+This install is destructive, it will create a number of symlinks in your home folder. Files or existing symlinks will be replaced
+
+- `git clone git://github.com/diabolo/dotfiles ~/.dotfiles`
 - `cd ~/.dotfiles`
 - `rake install`
 
-The install rake task will symlink the appropriate files in `.dotfiles` to your
-home directory. Everything is configured and tweaked within `~/.dotfiles`,
-though.
+However everything is configured and tweaked within `~/.dotfiles`.
 
 The main file you'll want to change right off the bat is `zsh/zshrc.symlink`,
 which sets up a few paths that'll be different on your particular machine.
@@ -39,10 +31,7 @@ symlinked without extension into `$HOME` when you run `rake install`.
 
 ## what's inside
 
-A lot of what's inside is just aliases: `gs` for `git status`, `gl` for `git
-pull --rebase --prune`, for example. You can browse the `aliases.zsh` files in
-each topic directory. There's also a collection of scripts in `bin` you can
-browse. A few notable ones:
+A lot of what's inside is just aliases.  You can browse the `aliases.zsh` files in each topic directory. There's also a collection of scripts in `bin` you can browse. A few notable ones:
 
 ###rails
 - `s` pings your system for any running Rails apps, and `deathss` will then
