@@ -13,30 +13,35 @@ Copyright (C) BEFORE THAT, some other scros on the internet
 /* Hide the links to other apps */
 #gbar { display:none }
 
+div[class='nH nn'] {:width 5px}
+div[class='b8 UC'] {:style display: none}
+
 /* Put the settings links on the same level as the search box  */
 div.nH + div.nH div.nH.qp {
   border: none;
   line-height: 22px;
   height: auto;
-  padding-top: 12px;
   position: absolute;
+  padding-top: 12px;
   right: 4px;
   z-index: 100000000 !important;
+}
+
+/* Put search box on far left, to keep as far away as possible from settings links */
+table[class='cf d'] {
+  position: absolute;
+  left: 5px;
+  z-index: 500000 !important
 }
 
 /* Hide the "Manage this Domain Link" */
 span[id=':qf'] { display:none }
 
 /* Hide the G-mail Logo */
-div.nH + div.nH div.nH div.no div.nH.nn {
-  display: none;
-}
-div.nH + div.nH div.nH div.no div.nH.nn + div.nH.nn {
-  display: block;
-}
+div[id=':rm'] { display: none}
 
 /* Hide the "Search the Web" button */
-div[id=':r8'], div[id=':r9'] {
+div[id=':ri']{
   display: none !important;
 }
 
