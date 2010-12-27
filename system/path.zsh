@@ -1,3 +1,3 @@
-export PATH=".:bin:/usr/local/bin:/usr/local/sbin:$ZSH/bin:$PATH"
+# lets see how our path comes out first before hacking it.
+# export PATH=".:bin:/usr/local/bin:/usr/local/sbin:$ZSH/bin:$PATH"
 
-export MANPATH="/usr/local/man:/usr/local/mysql/man:/usr/local/git/man:$MANPATH"
