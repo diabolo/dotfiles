@@ -25,8 +25,8 @@ alias gch='git checkout'
 alias gb='git branch'
 alias gba='git branch -a'
 alias ga='git add'
-alias gs='git status -sb' # upgrade your git if -sb breaks for you. it's fun.
 alias gst='git status'
+alias gs='git status -sb' # upgrade your git if -sb breaks for you. it's fun.
 # pretty sure this doesn't work
 # alias grm="git status | grep deleted | awk '{print \$3}' | xargs git rm"
 
