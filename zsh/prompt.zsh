@@ -1,73 +1,79 @@
+autoload -Uz vcs_info
 autoload colors && colors
-# cheers, @ehrenmurdick
-# http://github.com/ehrenmurdick/config/blob/master/zsh/prompt.zsh
 
-git_branch() {
-  echo $(/usr/bin/git symbolic-ref HEAD 2>/dev/null | awk -F/ {'print $NF'})
+zstyle ':vcs_info:*' stagedstr '%F{green}●%f'
+zstyle ':vcs_info:*' unstagedstr '%F{yellow}●%f'
+zstyle ':vcs_info:*' check-for-changes true
+zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat '%b%F{red}:%f%F{yellow}%r%f'
+zstyle ':vcs_info:*' enable git 
+
+precmd () {
+  if [[ -z $(git ls-files --other --exclude-standard 2> /dev/null) ]] {
+    #zstyle ':vcs_info:*' formats '%F{cyan}[%b%c%u%f%F{cyan}]%f'
+    zstyle ':vcs_info:*' formats '%F{yellow} (%b%c%u)'
+  } else {
+    zstyle ':vcs_info:*' formats '%b%c%u%F{red}●%f'
+  }
+  vcs_info
+  get_rvm_prompt
+  truncate_pwd
 }
 
-git_dirty() {
-  st=$(/usr/bin/git status 2>/dev/null | tail -n 1)
-  if [[ $st == "" ]]
-  then
-    echo ""
-  else
-    if [[ $st == "nothing to commit (working directory clean)" ]]
-    then
-      echo "on %{$fg_bold[green]%}$(git_prompt_info)%{$reset_color%}"
-    else
-      echo "on %{$fg_bold[red]%}$(git_prompt_info)%{$reset_color%}"
-    fi
-  fi
-}
-
-git_prompt_info () {
- ref=$(/usr/bin/git symbolic-ref HEAD 2>/dev/null) || return
-# echo "(%{\e[0;33m%}${ref#refs/heads/}%{\e[0m%})"
- echo "${ref#refs/heads/}"
-}
-
-project_name () {
-  name=$(pwd | awk -F'Sites/' '{print $2}' | awk -F/ '{print $1}')
-  echo $name
-}
-
-project_name_color () {
-  name=$(project_name)
-  echo "%{\e[0;35m%}${name}%{\e[0m%}"
-}
-
-unpushed () {
-  /usr/bin/git cherry -v origin/$(git_branch) 2>/dev/null
-}
-
-need_push () {
-  if [[ $(unpushed) == "" ]]
-  then
-    echo " "
-  else
-    echo "with %{$fg_bold[magenta]%}unpushed%{$reset_color%}"
-  fi
-}
-
-rvm_prompt(){
+function get_rvm_prompt {
   if $(which rvm &> /dev/null)
   then
-	  echo "%{$fg_bold[yellow]%}$(rvm tools identifier)%{$reset_color%}"
-	else
-	  echo ""
+    RVM_PROMPT=$(~/.rvm/bin/rvm-prompt u g)
+  else
+    RVM_PROMPT=""
   fi
 }
 
-directory_name(){
-  echo "%{$fg_bold[cyan]%}%1/%\/%{$reset_color%}"
+function truncate_pwd {
+# How many characters of the $PWD should be kept
+  local pwdmaxlen=25
+# Indicate that there has been dir truncation
+  local trunc_symbol=".."
+  local dir=${PWD##*/}
+  pwdmaxlen=$(( ( pwdmaxlen < ${#dir} ) ? ${#dir} : pwdmaxlen ))
+  NEW_PWD=${PWD/#$HOME/\~}
+  local pwdoffset=$(( ${#NEW_PWD} - pwdmaxlen ))
+  if [ ${pwdoffset} -gt "0" ]
+  then
+    NEW_PWD=$NEW_PWD[$pwdoffset,${#NEW_PWD}] 
+    NEW_PWD=${trunc_symbol}/${NEW_PWD#*/}
+  fi
+}  
+
+
+
+
+function vcs_inf {
+  echo -ne "${vcs_info_msg_0_}$reset_color"
 }
 
-export PROMPT=$'\n$(rvm_prompt) in $(directory_name) $(project_name_color)$(git_dirty) $(need_push)\n› '
-set_prompt () {
-  export RPROMPT=""
+function rvm_inf {
+  echo -ne "$fg[red] $RVM_PROMPT $reset_color"
 }
 
-precmd() {
-  set_prompt
+function directory_name {
+#  echo "%{$fg_bold[cyan]%}%1/%\/%{$reset_color%}"
+  #echo ${PWD/#$HOME/~}
+  echo -ne "$fg[blue]${NEW_PWD}$reset_color"
 }
+
+function user_loc_pwd {
+  local UC="$fg[green]"                 # user's color
+  [ $UID -eq "0" ] && UC="%F{yellow}"  # root's color
+
+  echo "$fg[black][${UC}%n@%m $(directory_name)$fg[black]]"
+}
+
+function set_prompt {
+# regular colors
+
+    
+  PROMPT=$'$(user_loc_pwd)$(vcs_inf)$(rvm_inf)\n${UC}➥  $reset_color'
+  RPROMPT=""
+
+}
+set_prompt
