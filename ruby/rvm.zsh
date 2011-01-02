@@ -1,1 +1,2 @@
-[[ -s $HOME/.rvm/scripts/rvm ]] && source $HOME/.rvm/scripts/rvm
+# Sourcing rvm does not work properly here it is now done at the
+# end of system/paths.zsh
